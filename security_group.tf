@@ -100,26 +100,57 @@ resource "aws_security_group" "chefserver" {
 #   }
 # }
 
-# resource "aws_security_group" "web" {
-#   name        = "web_server_sg"
-#   description = "Security Group for webserver"
-#   vpc_id      = aws_vpc.default.id
+resource "aws_security_group" "webserver" {
+  name        = "web_server_sg"
+  description = "Security Group for webserver"
+  vpc_id      = aws_vpc.default.id
 
-#   # Allow inbound HTTP connection from all
-#   ingress {
-#     from_port   = 80
-#     to_port     = 80
-#     protocol    = "tcp"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
+  # Allow inbound HTTP connection from all
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-#   # outbound internet access
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-# }
+    # Allow inbound HTTPS traffic 
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow inbound HTTP traffic 
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow ping
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 
 

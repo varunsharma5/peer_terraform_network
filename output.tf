@@ -27,3 +27,6 @@ output "default_security_group_id_array" {
 output "chefserver_security_group_id_array" {
   value = aws_security_group.chefserver.*.id
 }
+output "webserver_security_group_id_array" {
+  value = aws_security_group.webserver.*.id
+}
