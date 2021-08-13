@@ -30,3 +30,6 @@ output "chefserver_security_group_id_array" {
 output "webserver_security_group_id_array" {
   value = aws_security_group.webserver.*.id
 }
+output "mysqlserver_security_group_id_array" {
+  value = aws_security_group.mysqlserver.*.id
+}

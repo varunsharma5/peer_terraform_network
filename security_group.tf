@@ -70,35 +70,42 @@ resource "aws_security_group" "chefserver" {
   }
 }
 
-# resource "aws_security_group" "mysql" {
-#   name        = "mysql_server_sg"
-#   description = "Security Group for database server"
-#   vpc_id      = aws_vpc.default.id
+resource "aws_security_group" "mysqlserver" {
+  name        = "mysql_server_sg"
+  description = "Security Group for database server"
+  vpc_id      = aws_vpc.default.id
 
-#   # Allow inbound TCP connection for MySql from instances from the public subnet
-#   ingress {
-#     from_port   = 3306
-#     to_port     = 3306
-#     protocol    = "tcp"
-#     cidr_blocks = ["10.0.1.0/24"]
-#   }
+  # Allow inbound TCP connection for MySql from instances from the public subnet
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups = [aws_security_group.webserver.id]
+  }
 
-#   # Allow inbound TCP connection for MySql from instances from the private subnet
-#   ingress {
-#     from_port   = 3306
-#     to_port     = 3306
-#     protocol    = "tcp"
-#     cidr_blocks = ["10.0.100.0/24"]
-#   }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-#   # outbound internet access
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-# }
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    security_groups = [aws_security_group.webserver.id]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    # cidr_blocks = [aws_subnet.public_subnet.cidr_block]
+  }
+}
 
 resource "aws_security_group" "webserver" {
   name        = "web_server_sg"

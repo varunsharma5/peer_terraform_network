@@ -17,7 +17,7 @@ variable "public_subnet_name" {
   default = "varun-peer-review-public-subnet"
 }
 variable "private_subnet_name" {
-  default = "varun-peer-review-public-subnet"
+  default = "varun-peer-review-private-subnet"
 }
 variable "igw_name" {
   default = "varun-peer-review-igw"
